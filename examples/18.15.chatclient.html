@@ -1,0 +1,33 @@
+<script>
+window.onload = function() {
+    // Take care of some UI details
+    var nick = prompt("Enter your nickname");     // Get user's nickname
+    var input = document.getElementById("input"); // Find the input field
+    input.focus();                                // Set keyboard focus
+
+    // Register for notification of new messages using EventSource
+    var chat = new EventSource("/chat");
+    chat.onmessage = function(event) {            // When a new message arrives
+        var msg = event.data;                     // Get text from event object
+        var node = document.createTextNode(msg);  // Make it into a text node
+        var div = document.createElement("div");  // Create a <div>
+        div.appendChild(node);                    // Add text node to div
+        document.body.insertBefore(div, input);   // And add div before input
+        input.scrollIntoView();                   // Ensure input elt is visible
+    }
+
+    // Post the user's messages to the server using XMLHttpRequest
+    input.onchange = function() {                 // When user strikes return
+        var msg = nick + ": " + input.value;      // Username plus user's input
+        var xhr = new XMLHttpRequest();           // Create a new XHR
+        xhr.open("POST", "/chat");                // to POST to /chat.
+        xhr.setRequestHeader("Content-Type",      // Specify plain UTF-8 text 
+                             "text/plain;charset=UTF-8");
+        xhr.send(msg);                            // Send the message
+        input.value = "";                         // Get ready for more input
+    }
+};
+</script>
+<!-- The chat UI is just a single text input field -->
+<!-- New chat messages will be inserted before this input field -->
+<input id="input" style="width:100%"/>

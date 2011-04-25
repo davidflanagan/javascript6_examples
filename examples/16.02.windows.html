@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<head>
+<style type="text/css">
+/**
+ * This is a CSS stylesheet that defines three style rules that we use
+ * in the body of the document to create a "window" visual effect.
+ * The rules use positioning properties to set the overall size of the window
+ * and the position of its components. Changing the size of the window
+ * requires careful changes to positioning properties in all three rules.
+ **/
+div.window {  /* Specifies size and border of the window */
+    position: absolute;         /* The position is specified elsewhere */
+    width: 300px; height: 200px;/* Window size, not including borders */
+    border: 3px outset gray;    /* Note 3D "outset" border effect */
+}
+
+div.titlebar {  /* Specifies position, size, and style of the titlebar */
+    position: absolute;         /* It's a positioned element */
+    top: 0px; height: 18px;     /* Titlebar is 18px + padding and borders */
+    width: 290px;               /* 290 + 5px padding on left and right = 300 */
+    background-color: #aaa;     /* Titlebar color */
+    border-bottom: groove gray 2px;  /* Titlebar has border on bottom only */
+    padding: 3px 5px 2px 5px;   /* Values clockwise: top, right, bottom, left */
+    font: bold 11pt sans-serif; /* Title font */
+}
+
+div.content {  /* Specifies size, position and scrolling for window content */
+    position: absolute;         /* It's a positioned element */
+    top: 25px;                  /* 18px title+2px border+3px+2px padding */
+    height: 165px;              /* 200px total - 25px titlebar - 10px padding*/
+    width: 290px;               /* 300px width - 10px of padding */
+    padding: 5px;               /* Allow space on all four sides */
+    overflow: auto;             /* Give us scrollbars if we need them */
+    background-color: #fff;     /* White background by default */
+}
+
+div.translucent { /* this class makes a window partially transparent */
+    opacity: .75;               /* Standard style for transparency */
+    filter: alpha(opacity=75);  /* Transparency for IE */
+}
+</style>
+</head>
+
+<body>
+<!-- Here is how we define a window: a "window" div with a titlebar and -->
+<!-- content div nested inside. Note how position is specified with -->
+<!-- a style attribute that augments the styles from the stylesheet. -->
+<div class="window" style="left: 10px; top: 10px; z-index: 10;">
+<div class="titlebar">Test Window</div>
+<div class="content">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0<br><!-- Lots of lines to -->
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0<br><!-- demonstrate scrolling-->
+</div>
+</div>
+
+<!-- Here's another window with different position, color, and font weight -->
+<div class="window" style="left: 75px; top: 110px; z-index: 20;">
+<div class="titlebar">Another Window</div>
+<div class="content translucent"
+     style="background-color:#ccc; font-weight:bold;">
+This is another window. Its <tt>z-index</tt> puts it on top of the other one.
+CSS styles make its content area translucent, in browsers that support that.
+</div>
+</div>

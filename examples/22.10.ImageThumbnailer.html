@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html><head>
+<script>// At the time of this writing, Firefox and Webkit disagree on the
+// name of the createObjectURL() function
+var getBlobURL = (window.URL && URL.createObjectURL.bind(URL)) ||
+    (window.webkitURL && webkitURL.createObjectURL.bind(webkitURL)) ||
+    window.createObjectURL;
+var revokeBlobURL = (window.URL && URL.revokeObjectURL.bind(URL)) ||
+    (window.webkitURL && webkitURL.revokeObjectURL.bind(webkitURL)) ||
+    window.revokeObjectURL;
+
+// When the document is loaded, add event handlers to the droptarget element
+// so that it can handle drops of files
+window.onload = function() {
+    // Find the element we want to add handlers to.
+    var droptarget = document.getElementById("droptarget");
+
+    // When the user starts dragging files over the droptarget, highlight it.
+    droptarget.ondragenter = function(e) {
+        // If the drag is something other than files, ignore it.
+        // The HTML5 dropzone attribute will simplify this when implemented.
+        var types = e.dataTransfer.types;
+        if (!types ||
+            (types.contains && types.contains("Files")) ||
+            (types.indexOf && types.indexOf("Files") != -1)) {
+            droptarget.classList.add("active"); // Highlight droptarget
+            return false;                       // We're interested in the drag
+        }
+    };
+    // Unhighlight the drop zone if the user moves out of it
+    droptarget.ondragleave = function() {
+        droptarget.classList.remove("active");
+    };
+
+    // This handler just tells the browser to keep sending notifications
+    droptarget.ondragover = function(e) { return false; };
+
+    // When the user drops files on us, get their URLs and display thumbnails.
+    droptarget.ondrop = function(e) {
+        var files = e.dataTransfer.files;            // The dropped files
+        for(var i = 0; i < files.length; i++) {      // Loop through them all
+            var type = files[i].type;
+            if (type.substring(0,6) !== "image/")    // Skip any nonimages
+                continue;
+            var img = document.createElement("img"); // Create an <img> element
+            img.src = getBlobURL(files[i]);          // Use Blob URL with <img>
+            img.onload = function() {                // When it loads
+                this.width = 100;                    // adjust its size and
+                document.body.appendChild(this);     // insert into document.
+                revokeBlobURL(this.src);             // But don't leak memory!
+            }
+        }
+
+        droptarget.classList.remove("active");       // Unhighlight droptarget
+        return false;                                // We've handled the drop
+    }
+};
+</script>
+<style> /* Simple styles for the file drop target */
+#droptarget { border: solid black 2px; width: 200px; height: 200px; }
+#droptarget.active { border: solid red 4px; }
+</style>
+</head>
+<body> <!-- The document starts off with just the file drop target -->
+<div id="droptarget">Drop Image Files Here</div>
+</body>
+</html>

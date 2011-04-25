@@ -1,0 +1,29 @@
+<!DOCTYPE html>                 <!-- This is an HTML5 file -->
+<html>                          <!-- The root element -->
+<head>                          <!-- Title, scripts & styles go here -->
+<title>Digital Clock</title>
+<script>                        // A script of js code
+// Define a function to display the current time
+function displayTime() {
+    var elt = document.getElementById("clock");  // Find element with id="clock"
+    var now = new Date();                        // Get current time
+    elt.innerHTML = now.toLocaleTimeString();    // Make elt display it
+    setTimeout(displayTime, 1000);               // Run again in 1 second
+}
+window.onload = displayTime;  // Start displaying the time when document loads.
+</script>
+<style>                         /* A CSS stylesheet for the clock */
+#clock {                        /* Style apply to element with id="clock" */
+  font: bold 24pt sans;         /* Use a big bold font */
+  background: #ddf;             /* On a light bluish-gray background */
+  padding: 10px;                /* Surround it with some space */
+  border: solid black 2px;      /* And a solid black border */
+  border-radius: 10px;          /* Round the corners (where supported) */
+}
+</style>
+</head>
+<body>                    <!-- The body is the displayed parts of the doc. -->
+<h1>Digital Clock</h1>    <!-- Display a title -->
+<span id="clock"></span>  <!-- The time gets inserted here -->
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!--
+  This is not a stand-alone HTML file. It must be invoked by showModalDialog().
+  It expects window.dialogArguments to be an array of strings.
+  The first element of the array is displayed at the top of the dialog.
+  Each remaining element is a label for a single-line text input field.
+  Returns an array of input field values when the user clicks Okay.
+  Use this file with code like this:
+
+  var p = showModalDialog("multiprompt.html",
+                          ["Enter 3D point coordinates", "x", "y", "z"],
+                          "dialogwidth:400; dialogheight:300; resizable:yes");
+  -->
+<form>
+<fieldset id="fields"></fieldset> <!-- Dialog body filled in by script below -->
+<div style="text-align:center">   <!-- Buttons to dismiss the dialog -->
+<button onclick="okay()">Okay</button>     <!-- Set return value and close -->
+<button onclick="cancel()">Cancel</button> <!-- Close with no return value -->
+</div>
+<script>
+// Create the HTML for the dialog body and display it in the fieldset
+var args = dialogArguments;
+var text = "<legend>" + args[0] + "</legend>";
+for(var i = 1; i < args.length; i++) 
+    text += "<label>" + args[i] + ": <input id='f" + i + "'></label><br>";
+document.getElementById("fields").innerHTML = text;
+
+// Close the dialog without setting a return value
+function cancel() { window.close(); }
+
+// Read the input field values and set a return value, then close
+function okay() {
+    window.returnValue = [];             // Return an array
+    for(var i = 1; i < args.length; i++) // Set elements from input fields
+        window.returnValue[i-1] = document.getElementById("f" + i).value;
+    window.close();  // Close the dialog. This makes showModalDialog() return.
+}
+</script>
+</form>
