@@ -16,6 +16,10 @@ window.onload = function() {
         // Find the "handle" element with the container
         var title = elt.getElementsByClassName("handle")[0];
         // When that element is clicked, reveal the rest of the content
+        addRevealHandler(title, elt);
+    }
+
+    function addRevealHandler(title, elt) {
         title.onclick = function() {
             if (elt.className == "reveal") elt.className = "revealed";
             else if (elt.className == "revealed") elt.className = "reveal";
@@ -28,6 +32,10 @@ window.onload = function() {
 <div class="reveal">
 <h1 class="handle">Click Here to Reveal Hidden Text</h1>
 <p>This paragraph is hidden. It appears when you click on the title.</p>
+</div>
+<div class="reveal">
+<h1 class="handle">Click Here to Reveal More</h1>
+<p>This is another hidden paragraph!</p>
 </div>
 </body>
 </html>
